@@ -6,11 +6,15 @@ import argparse
 import urllib.parse
 
 
-def urlencode(string):
+def urlencode(args):
     """URL Encode String."""
+    if args.safe:
+        safe=""
+    else:
+        safe="/"
     result = []
-    for word in string:
-        result.append(urllib.parse.quote(word))
+    for word in args.string:
+        result.append(urllib.parse.quote(word, safe=safe))
     print("".join(result))
 
 
@@ -71,7 +75,7 @@ def main(args):
             decimaldecode(args.string)
     else:
         if args.url:
-            urlencode(args.string)
+            urlencode(args)
         if args.html:
             htmlencode(args.string)
         if args.decimal:
@@ -85,6 +89,8 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--decode", action="store_true", help="Decode instead of encode.")
     parser.add_argument("-u", "--url", action='store_true', help="URL encode special characters.")
     parser.add_argument("-t", "--html", action='store_true', help="HTML encode special characters.")
+    parser.add_argument("-s", "--safe", action="store_true",
+                        help="When used with URL encoding it will encode '/' as '%%2F'")
     parser.add_argument("--decimal", action="store_true", help="Convert letter to decimal.")
     parser.add_argument("string", nargs="+", default=sys.stdin, help="Text that should be encoded.")
     arglist = sys.argv[1:]

@@ -26,6 +26,10 @@ class TestURLMethods(unittest.TestCase):
         result = subprocess.run(["encode.py", "-u", "-d", "%3Ffoo%26bar"], capture_output=True)
         self.assertEqual("?foo&bar", result.stdout.decode().strip())
 
+    def test_url_encode_safe(self):
+        result = subprocess.run(["encode.py", "-u", "-s", "/?foo&bar"], capture_output=True)
+        self.assertEqual("%2F%3Ffoo%26bar", result.stdout.decode().strip())
+
 class TestDecimalMethods(unittest.TestCase):
 
     def test_decimal_encode(self):
